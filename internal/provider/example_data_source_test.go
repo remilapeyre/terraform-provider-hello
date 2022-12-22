@@ -11,11 +11,17 @@ func TestAccMessageDataSource(t *testing.T) {
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
-			// Read testing
 			{
 				Config: testAccMessageDataSourceConfig,
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("data.hello_message.test", "message", "hello world"),
+				),
+			},
+			{
+				Config: testAccMessageDataSourceConfigTarget,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr("data.hello_message.test", "target", "terraform"),
+					resource.TestCheckResourceAttr("data.hello_message.test", "message", "hello terraform"),
 				),
 			},
 		},
@@ -24,4 +30,10 @@ func TestAccMessageDataSource(t *testing.T) {
 
 const testAccMessageDataSourceConfig = `
 data "hello_message" "test" {}
+`
+
+const testAccMessageDataSourceConfigTarget = `
+data "hello_message" "test" {
+  target = "terraform"
+}
 `
